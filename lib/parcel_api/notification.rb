@@ -18,7 +18,7 @@ module ParcelApi
     # @return Object of notification details
 
     def create(notification_options)
-      response = @connection.post PARCELNOTIFICATION_URL, body: notification_options.to_json, headers: { 'Content-Type' => 'application/json' }
+      response = @connection.post PARCELNOTIFICATION_URL, body: notification_options.to_json.to_ascii, headers: { 'Content-Type' => 'application/json' }
       RecursiveOpenStruct.new(response.parsed, recurse_over_arrays: true)
     end
 

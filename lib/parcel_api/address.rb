@@ -21,7 +21,7 @@ module ParcelApi
 
     def search(query, count=10)
       return [] if query.length < 4
-      response = @connection.get DOMESTIC_URL, params: { q: query, count: count }
+      response = @connection.get DOMESTIC_URL, params: { q: query.to_ascii, count: count }
       addresses = response.parsed['addresses'].each do |a|
         a['address_id'] = Integer(a['address_id'])
         a['dpid'] = Integer(a['dpid']) if a['dpid']
@@ -67,7 +67,7 @@ module ParcelApi
     def international_search(query, count=5, country_code=nil)
       return [] if query.length < 4
 
-      response = @connection.get INTERNATIONAL_URL, params: { q: query, count: count, country_code: country_code }
+      response = @connection.get INTERNATIONAL_URL, params: { q: query.to_ascii, count: count, country_code: country_code }
       response.parsed['addresses'].map {|address| OpenStruct.new(address)}
     end
 

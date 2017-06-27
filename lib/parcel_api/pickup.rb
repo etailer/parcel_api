@@ -17,7 +17,7 @@ module ParcelApi
     # @return Object of pickup details
 
     def create(pickup_options)
-      response = @connection.post PARCELPICKUP_URL, body: pickup_options.to_json, headers: { 'Content-Type' => 'application/json' }
+      response = @connection.post PARCELPICKUP_URL, body: pickup_options.to_json.to_ascii, headers: { 'Content-Type' => 'application/json' }
       RecursiveOpenStruct.new(response.parsed, recurse_over_arrays: true)
     end
 

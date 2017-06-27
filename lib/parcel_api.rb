@@ -1,4 +1,5 @@
 require 'recursive-open-struct'
+require 'stringex_lite'
 
 require 'parcel_api/version'
 require 'parcel_api/address'

@@ -18,7 +18,7 @@ module ParcelApi
 
     def create(label_options)
       domestic_url = File.join(LABEL_URL, 'domestic')
-      response = @connection.post domestic_url, body: label_options.to_json, headers: { 'Content-Type' => 'application/json' }
+      response = @connection.post domestic_url, body: label_options.to_json.to_ascii, headers: { 'Content-Type' => 'application/json' }
       labels = response.parsed['labels'].map {|label| OpenStruct.new(label)}
       labels.first if labels.count == 1
     end
@@ -29,7 +29,7 @@ module ParcelApi
 
     def international_create(label_options)
       international_url = File.join(LABEL_URL, 'international')
-      response = @connection.post international_url, body: label_options.to_json, headers: { 'Content-Type' => 'application/json' }
+      response = @connection.post international_url, body: label_options.to_json.to_ascii, headers: { 'Content-Type' => 'application/json' }
       labels = response.parsed['labels'].map {|label| OpenStruct.new(label)}
       labels.first if labels.count == 1
     end
