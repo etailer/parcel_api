@@ -6,6 +6,8 @@ module ParcelApi
   class Label
     LABEL_URL = '/ParcelLabel/2.0/labels'
 
+    attr_accessor :labels, :last_response
+
     # Creates a new ParcelApi::Label instance.
 
     def initialize(connection=nil)
@@ -17,10 +19,7 @@ module ParcelApi
     # @return Single or array of label objects
 
     def create(label_options)
-      domestic_url = File.join(LABEL_URL, 'domestic')
-      response = @connection.post domestic_url, body: label_options.to_json.to_ascii, headers: { 'Content-Type' => 'application/json' }
-      labels = response.parsed['labels'].map {|label| OpenStruct.new(label)}
-      labels.first if labels.count == 1
+      create_label File.join(LABEL_URL, 'domestic'), label_options
     end
 
     # Create an international label with the specified options
@@ -28,10 +27,7 @@ module ParcelApi
     # @return Single or array of label objects
 
     def international_create(label_options)
-      international_url = File.join(LABEL_URL, 'international')
-      response = @connection.post international_url, body: label_options.to_json.to_ascii, headers: { 'Content-Type' => 'application/json' }
-      labels = response.parsed['labels'].map {|label| OpenStruct.new(label)}
-      labels.first if labels.count == 1
+      create_label File.join(LABEL_URL, 'international', label_options)
     end
 
     # Get label details
@@ -53,6 +49,17 @@ module ParcelApi
       download_url = File.join(LABEL_URL, "#{label_id}.pdf")
       response = @connection.get download_url
       StringIO.new(response.body)
+    end
+
+    private
+
+    def create_label(url, label_options)
+      last_response = @connection.post(url,
+        body: label_options.to_json.to_ascii,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+      labels = last_response.parsed['labels'].map {|label| OpenStruct.new(label)}
+      labels.first if labels.count == 1
     end
 
   end
