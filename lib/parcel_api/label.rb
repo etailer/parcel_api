@@ -6,7 +6,7 @@ module ParcelApi
   class Label
     LABEL_URL = '/ParcelLabel/2.0/labels'
 
-    attr_accessor :connection, :labels, :last_response
+    attr_accessor :connection, :labels, :label_request, :label_response
 
     # Creates a new ParcelApi::Label instance.
 
@@ -54,12 +54,12 @@ module ParcelApi
     private
 
     def create_label(url, label_options)
-      last_response = connection.post(url,
+      label_request = {
         body: label_options.to_json.to_ascii,
         headers: { 'Content-Type' => 'application/json' }
-      )
-      labels = last_response.parsed['labels'].map {|label| OpenStruct.new(label)}
-      labels.first if labels.count == 1
+      }
+      label_response = connection.post(url, label_request)
+      label_response.parsed['labels'].map {|label| OpenStruct.new(label)}.first
     end
 
   end
