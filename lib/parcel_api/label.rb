@@ -54,12 +54,12 @@ module ParcelApi
     private
 
     def create_label(url, label_options)
-      label_request = {
+      self.label_request = {
         body: label_options.to_json.to_ascii,
         headers: { 'Content-Type' => 'application/json' }
       }
-      label_response = connection.post(url, label_request)
-      label_response.parsed['labels'].map {|label| OpenStruct.new(label)}.first
+      self.label_response = connection.post(url, label_request)
+      self.label_response.parsed['labels'].map {|label| OpenStruct.new(label)}.first
     end
 
   end
