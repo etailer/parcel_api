@@ -6,12 +6,12 @@ module ParcelApi
   class Label
     LABEL_URL = '/ParcelLabel/2.0/labels'
 
-    attr_accessor :labels, :last_response
+    attr_accessor :connection, :labels, :last_response
 
     # Creates a new ParcelApi::Label instance.
 
-    def initialize(connection=nil)
-      @connection ||= connection || ParcelApi::Client.connection
+    def initialize(connection = nil)
+      self.connection ||= connection || ParcelApi::Client.connection
     end
 
     # Create a label with the specified options
@@ -36,7 +36,7 @@ module ParcelApi
 
     def details(label_id)
       details_url = File.join(LABEL_URL, "#{label_id}.json")
-      response = @connection.get details_url
+      response = connection.get details_url
       details = response.parsed.tap {|d| d.delete('success')}
       OpenStruct.new(details)
     end
@@ -47,14 +47,14 @@ module ParcelApi
 
     def download(label_id)
       download_url = File.join(LABEL_URL, "#{label_id}.pdf")
-      response = @connection.get download_url
+      response = connection.get download_url
       StringIO.new(response.body)
     end
 
     private
 
     def create_label(url, label_options)
-      last_response = @connection.post(url,
+      last_response = connection.post(url,
         body: label_options.to_json.to_ascii,
         headers: { 'Content-Type' => 'application/json' }
       )
