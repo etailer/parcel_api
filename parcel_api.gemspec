@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'thor', '~> 0.19'
   spec.add_dependency 'oauth2', '~> 1.0'
-  spec.add_dependency 'redis', '~> 3.2'
   spec.add_dependency 'activesupport', '~> 4.2'
   spec.add_dependency 'recursive-open-struct', '~> 0.6'
   spec.add_dependency 'stringex', '~> 2.7', '>= 2.7.1'
